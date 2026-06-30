@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780317783053",
+    "project_id": "nexio-922c0",
+    "storage_bucket": "nexio-922c0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780317783053:android:175f80c68ebfc178c01144",
+        "android_client_info": {
+          "package_name": "com.nexio.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPk6G-Bottr7EtWnqlWBUFX1jPrzEX9Fo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,61 @@
+{
+  "cli": {
+    "version": ">= 16.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false
+      },
+      "env": {
+        "EXPO_USE_METRO_WORKSPACE_ROOT": "1",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://thqhypzcisewftszeuat.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRocWh5cHpjaXNld2Z0c3pldWF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NjEyNDQsImV4cCI6MjA5ODMzNzI0NH0.YLciqpe5U2B1RTrqJABC_LN0GY9P5MqIgL43ZfT4Jsg",
+        "EXPO_PUBLIC_LIVEKIT_URL": "wss://nexio-rtj2f6wb.livekit.cloud",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://53ac8bf49fbfd2fe9347f84bf0890117@o4511411944357888.ingest.us.sentry.io/4511651176972288",
+        "EXPO_PUBLIC_GIPHY_API_KEY": "aeFXRupnCim635CpleNUemvSnbepMsIZ",
+        "EXPO_PUBLIC_PRIVACY_URL": "https://nexio.app/privacy",
+        "EXPO_PUBLIC_TERMS_URL": "https://nexio.app/terms"
+      },
+      "node": "22.14.0",
+      "pnpm": "10.6.5"
+    },
+    "production": {
+      "autoIncrement": true,
+      "ios": {
+        "resourceClass": "m-medium"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "REPLACE_WITH_APPLE_ID",
+        "ascAppId": "REPLACE_WITH_APP_STORE_CONNECT_APP_ID",
+        "appleTeamId": "REPLACE_WITH_TEAM_ID"
+      },
+      "android": {
+        "serviceAccountKeyPath": "./google-play-service-account.json",
+        "track": "internal"
+      }
+    }
+  }
+}
