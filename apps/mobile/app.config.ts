@@ -6,6 +6,16 @@ const BUNDLE_ID = "com.nexio.app";
 const BRAND_ICON = "./assets/nexio-icon.png";
 const BRAND_BACKGROUND = "#080810";
 
+const publicEnv = {
+  EXPO_PUBLIC_SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
+  EXPO_PUBLIC_SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+  EXPO_PUBLIC_LIVEKIT_URL: process.env.EXPO_PUBLIC_LIVEKIT_URL,
+  EXPO_PUBLIC_SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  EXPO_PUBLIC_GIPHY_API_KEY: process.env.EXPO_PUBLIC_GIPHY_API_KEY,
+  EXPO_PUBLIC_PRIVACY_URL: process.env.EXPO_PUBLIC_PRIVACY_URL,
+  EXPO_PUBLIC_TERMS_URL: process.env.EXPO_PUBLIC_TERMS_URL,
+};
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: APP_NAME,
@@ -83,5 +93,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     eas: {
       projectId: "42ab374c-9724-491b-9195-d5e543a1ca24",
     },
+    ...publicEnv,
   },
 });
