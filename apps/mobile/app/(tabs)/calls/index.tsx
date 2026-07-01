@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { FlatList, Pressable, StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Phone, Video } from "lucide-react-native";
 import { fetchCallHistory, type CallSession } from "../../../src/features/calls/api/callsApi";
 import { useAuthStore } from "../../../src/features/auth/store/authStore";
 import { EmptyState, ScreenHeader, Text } from "../../../src/shared/components";
+import { useScreenFocusEffect } from "../../../src/shared/hooks/useScreenFocusEffect";
 import { colors, spacing } from "../../../src/shared/theme";
 
 export default function CallsScreen() {
@@ -18,7 +19,7 @@ export default function CallsScreen() {
     setCalls(data);
   }, [user]);
 
-  useEffect(() => {
+  useScreenFocusEffect(() => {
     load();
   }, [load]);
 

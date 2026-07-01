@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -30,6 +30,7 @@ import { MarketplaceSection } from "../../src/features/marketplace/components/Ma
 import { SellerDashboardCard } from "../../src/features/marketplace/components/SellerDashboardCard";
 import { useAuthStore } from "../../src/features/auth/store/authStore";
 import { EmptyState, ScreenHeader, Text, TextField } from "../../src/shared/components";
+import { useScreenFocusEffect } from "../../src/shared/hooks/useScreenFocusEffect";
 import { colors, spacing } from "../../src/shared/theme";
 
 type Tab = "browse" | "seller" | "favorites";
@@ -104,7 +105,7 @@ export default function MarketplaceScreen() {
     }
   }, [user]);
 
-  useEffect(() => {
+  useScreenFocusEffect(() => {
     if (tab === "browse") loadBrowse();
     else if (tab === "seller") loadSeller();
   }, [tab, loadBrowse, loadSeller]);

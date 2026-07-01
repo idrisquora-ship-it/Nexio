@@ -16,6 +16,7 @@ import { fetchStoryTray } from "../../../src/features/updates/api/updatesApi";
 import { StoryRing } from "../../../src/features/updates/components/StoryRing";
 import { useAuthStore } from "../../../src/features/auth/store/authStore";
 import { EmptyState, ScreenHeader, Text } from "../../../src/shared/components";
+import { useScreenFocusEffect } from "../../../src/shared/hooks/useScreenFocusEffect";
 import { colors, spacing } from "../../../src/shared/theme";
 import type { StoryTrayUser } from "../../../src/features/updates/api/updatesApi";
 
@@ -41,9 +42,13 @@ export default function ChatsScreen() {
     }
   }, [user]);
 
-  useEffect(() => {
+  useScreenFocusEffect(() => {
     if (!user) return;
     load();
+  }, [user, load]);
+
+  useEffect(() => {
+    if (!user) return;
     return subscribeToConversations(user.id, load);
   }, [user, load]);
 

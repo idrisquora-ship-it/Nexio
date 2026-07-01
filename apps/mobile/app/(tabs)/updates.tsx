@@ -27,6 +27,7 @@ import { ChannelPostCard } from "../../src/features/updates/components/ChannelPo
 import { StoryRing } from "../../src/features/updates/components/StoryRing";
 import { UpdatesFeedSection } from "../../src/features/updates/components/UpdatesFeedSection";
 import { EmptyState, ScreenHeader, Text } from "../../src/shared/components";
+import { useScreenFocusEffect } from "../../src/shared/hooks/useScreenFocusEffect";
 import { colors, spacing } from "../../src/shared/theme";
 import type { Announcement } from "../../src/features/moderation/api/reportsApi";
 import type { ReactionSummary } from "../../src/features/updates/components/ChannelPostReactions";
@@ -93,7 +94,7 @@ export default function UpdatesScreen() {
     await loadReactions([...communityPosts, ...channels]);
   }, [user, loadReactions]);
 
-  useEffect(() => {
+  useScreenFocusEffect(() => {
     load().catch(() => undefined);
   }, [load]);
 

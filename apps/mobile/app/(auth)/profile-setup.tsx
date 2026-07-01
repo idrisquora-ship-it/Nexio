@@ -7,6 +7,7 @@ import { profileSetupSchema, type ProfileSetupInput } from "@nexio/shared";
 import { Button, Text, TextField } from "../../src/shared/components";
 import { completeProfileSetup } from "../../src/features/auth/api/authApi";
 import { needsOnboarding, useAuthStore } from "../../src/features/auth/store/authStore";
+import { formatErrorMessage } from "../../src/shared/lib/formatErrorMessage";
 import { colors, spacing } from "../../src/shared/theme";
 
 export default function ProfileSetupScreen() {
@@ -27,7 +28,7 @@ export default function ProfileSetupScreen() {
   }
 
   if (profile && !needsOnboarding(profile)) {
-    return <Redirect href="/(tabs)/chats" />;
+    return <Redirect href="/" />;
   }
 
   const onSubmit = handleSubmit(async (values) => {
@@ -38,13 +39,7 @@ export default function ProfileSetupScreen() {
       setProfile(updated);
       router.replace("/");
     } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : typeof error === "object" && error !== null && "message" in error
-            ? String((error as { message: unknown }).message)
-            : "Try again";
-      Alert.alert("Could not save profile", message);
+      Alert.alert("Could not save profile", formatErrorMessage(error));
     } finally {
       setLoading(false);
     }
