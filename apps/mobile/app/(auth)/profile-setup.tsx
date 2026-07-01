@@ -36,9 +36,15 @@ export default function ProfileSetupScreen() {
     try {
       const updated = await completeProfileSetup(session.user.id, values);
       setProfile(updated);
-      router.replace("/(tabs)/chats");
+      router.replace("/");
     } catch (error) {
-      Alert.alert("Could not save profile", error instanceof Error ? error.message : "Try again");
+      const message =
+        error instanceof Error
+          ? error.message
+          : typeof error === "object" && error !== null && "message" in error
+            ? String((error as { message: unknown }).message)
+            : "Try again";
+      Alert.alert("Could not save profile", message);
     } finally {
       setLoading(false);
     }

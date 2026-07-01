@@ -34,19 +34,24 @@ export async function fetchProfile(userId: string) {
   return data;
 }
 
-export async function isUsernameAvailable(username: string) {
-  const { data, error } = await getSupabase()
+export async function isUsernameAvailable(username: string, excludeUserId?: string) {
+  let query = getSupabase()
     .from("profiles")
     .select("id")
-    .eq("username", username.toLowerCase())
-    .maybeSingle();
+    .eq("username", username.toLowerCase());
+
+  if (excludeUserId) {
+    query = query.neq("id", excludeUserId);
+  }
+
+  const { data, error } = await query.maybeSingle();
   if (error) throw error;
   return !data;
 }
 
 export async function completeProfileSetup(userId: string, input: ProfileSetupInput) {
   const username = input.username.toLowerCase();
-  const available = await isUsernameAvailable(username);
+  const available = await isUsernameAvailable(username, userId);
   if (!available) {
     throw new Error("Username is already taken");
   }

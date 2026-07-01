@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
-import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { Search, Star } from "lucide-react-native";
 import { ConversationRow } from "../../../src/features/messaging/components/ConversationRow";
@@ -43,15 +42,10 @@ export default function ChatsScreen() {
   }, [user]);
 
   useEffect(() => {
+    if (!user) return;
     load();
-  }, [load]);
-
-  useFocusEffect(
-    useCallback(() => {
-      if (!user) return;
-      return subscribeToConversations(user.id, load);
-    }, [user, load]),
-  );
+    return subscribeToConversations(user.id, load);
+  }, [user, load]);
 
   const visible = unreadOnly ? conversations.filter((c) => c.has_unread) : conversations;
 

@@ -27,7 +27,7 @@ export default function AuthLayout() {
     if (needsOnboarding(profile)) {
       return <Redirect href="/(auth)/username" />;
     }
-    return <Redirect href="/(tabs)/chats" />;
+    return <Redirect href="/" />;
   }
 
   return <Stack screenOptions={{ headerShown: false }} />;
