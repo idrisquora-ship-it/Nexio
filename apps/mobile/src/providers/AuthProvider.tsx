@@ -22,26 +22,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
-      const profile = await hydrateSession(session);
-      setProfile(profile);
+      setLoading(false);
       if (session?.user) {
         registerPushToken(session.user.id).catch(() => undefined);
+        hydrateSession(session).then(setProfile).catch(() => setProfile(null));
       }
-      setLoading(false);
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, session: Session | null) => {
       setSession(session);
+      setLoading(false);
       if (session?.user) {
-        const profile = await hydrateSession(session);
-        setProfile(profile);
         registerPushToken(session.user.id).catch(() => undefined);
+        hydrateSession(session).then(setProfile).catch(() => setProfile(null));
       } else {
         reset();
       }
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from "react-native";
-import { Redirect } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileSetupSchema, type ProfileSetupInput } from "@nexio/shared";
@@ -10,6 +10,7 @@ import { needsOnboarding, useAuthStore } from "../../src/features/auth/store/aut
 import { colors, spacing } from "../../src/shared/theme";
 
 export default function ProfileSetupScreen() {
+  const router = useRouter();
   const { session, profile, setProfile } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
@@ -35,6 +36,7 @@ export default function ProfileSetupScreen() {
     try {
       const updated = await completeProfileSetup(session.user.id, values);
       setProfile(updated);
+      router.replace("/(tabs)/chats");
     } catch (error) {
       Alert.alert("Could not save profile", error instanceof Error ? error.message : "Try again");
     } finally {

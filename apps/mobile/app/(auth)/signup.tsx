@@ -6,10 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupInput } from "@nexio/shared";
 import { Button, Text, TextField } from "../../src/shared/components";
 import { signInWithGoogle, signUpWithEmail } from "../../src/features/auth/api/authApi";
+import { useAuthStore } from "../../src/features/auth/store/authStore";
 import { colors, spacing } from "../../src/shared/theme";
 
 export default function SignupScreen() {
   const router = useRouter();
+  const setSession = useAuthStore((s) => s.setSession);
   const [loading, setLoading] = useState(false);
   const { control, handleSubmit, formState: { errors } } = useForm<SignupInput>({
     resolver: zodResolver(signupSchema),
@@ -22,7 +24,10 @@ export default function SignupScreen() {
       const { session } = await signUpWithEmail(values);
       if (!session) {
         Alert.alert("Check your email", "Confirm your email address to finish signing up.");
+        return;
       }
+      setSession(session);
+      router.replace("/");
     } catch (error) {
       Alert.alert("Signup failed", error instanceof Error ? error.message : "Try again");
     } finally {
@@ -66,7 +71,12 @@ export default function SignupScreen() {
             label="Continue with Google"
             variant="secondary"
             onPress={() =>
-              signInWithGoogle().catch((e) => Alert.alert("Google sign-in", e.message))
+              signInWithGoogle()
+                .then((session) => {
+                  setSession(session);
+                  router.replace("/");
+                })
+                .catch((e) => Alert.alert("Google sign-in", e.message))
             }
           />
         </View>

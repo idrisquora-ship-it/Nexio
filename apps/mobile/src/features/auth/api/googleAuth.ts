@@ -1,21 +1,12 @@
 import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri } from "expo-auth-session";
+import type { Session } from "@supabase/supabase-js";
 import { getSupabase } from "../../../shared/lib/supabase";
+import { parseAuthRedirectParams } from "../lib/parseAuthRedirect";
 
 WebBrowser.maybeCompleteAuthSession();
 
-function parseParamsFromUrl(url: string) {
-  const parsed = new URL(url);
-  const hashParams = new URLSearchParams(parsed.hash.replace(/^#/, ""));
-  const queryParams = parsed.searchParams;
-  return {
-    access_token: hashParams.get("access_token") ?? queryParams.get("access_token"),
-    refresh_token: hashParams.get("refresh_token") ?? queryParams.get("refresh_token"),
-    code: queryParams.get("code"),
-  };
-}
-
-export async function signInWithGoogle() {
+export async function signInWithGoogle(): Promise<Session> {
   const redirectTo = makeRedirectUri({ scheme: "nexio", path: "auth/callback" });
   const supabase = getSupabase();
 
@@ -35,22 +26,23 @@ export async function signInWithGoogle() {
     throw new Error("Google sign-in was cancelled");
   }
 
-  const params = parseParamsFromUrl(result.url);
+  const params = parseAuthRedirectParams(result.url);
 
   if (params.code) {
     const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(params.code);
     if (exchangeError) throw exchangeError;
-    return;
-  }
-
-  if (params.access_token && params.refresh_token) {
+  } else if (params.access_token && params.refresh_token) {
     const { error: sessionError } = await supabase.auth.setSession({
       access_token: params.access_token,
       refresh_token: params.refresh_token,
     });
     if (sessionError) throw sessionError;
-    return;
+  } else {
+    throw new Error("Could not complete Google sign-in");
   }
 
-  throw new Error("Could not complete Google sign-in");
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError) throw sessionError;
+  if (!session) throw new Error("Could not complete Google sign-in");
+  return session;
 }

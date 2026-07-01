@@ -6,10 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginInput } from "@nexio/shared";
 import { Button, Text, TextField } from "../../src/shared/components";
 import { signInWithEmail, signInWithGoogle } from "../../src/features/auth/api/authApi";
+import { useAuthStore } from "../../src/features/auth/store/authStore";
 import { colors, spacing } from "../../src/shared/theme";
 
 export default function LoginScreen() {
   const router = useRouter();
+  const setSession = useAuthStore((s) => s.setSession);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const { control, handleSubmit, formState: { errors } } = useForm<LoginInput>({
@@ -20,7 +22,9 @@ export default function LoginScreen() {
   const onSubmit = handleSubmit(async (values) => {
     setLoading(true);
     try {
-      await signInWithEmail(values);
+      const { session } = await signInWithEmail(values);
+      if (session) setSession(session);
+      router.replace("/");
     } catch (error) {
       Alert.alert("Login failed", error instanceof Error ? error.message : "Try again");
     } finally {
@@ -76,6 +80,10 @@ export default function LoginScreen() {
           onPress={() => {
             setGoogleLoading(true);
             signInWithGoogle()
+              .then((session) => {
+                setSession(session);
+                router.replace("/");
+              })
               .catch((e) => Alert.alert("Google sign-in", e.message))
               .finally(() => setGoogleLoading(false));
           }}
